@@ -51,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         todoLists = read();
+        Todo test = new Todo("测试", "2019-08-20", "17:00", 0);
+        todoLists.add(test);
         todoAdapter = new TodoAdapter(this, R.layout.item_todo, todoLists);
         listView.setAdapter(todoAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
