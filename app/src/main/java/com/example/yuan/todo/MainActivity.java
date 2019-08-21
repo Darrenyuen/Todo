@@ -1,28 +1,21 @@
 package com.example.yuan.todo;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.Toolbar;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -50,48 +43,70 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        todoLists = read();
-        Todo test = new Todo("测试", "2019-08-20", "17:00", 0);
-        todoLists.add(test);
+        todoLists = new LinkedList<>();
+        loadDataFromDatabase();
         todoAdapter = new TodoAdapter(this, R.layout.item_todo, todoLists);
         listView.setAdapter(todoAdapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                switch (view.getId()) {
-                    case R.id.deleteItem: todoLists.remove(position); break;
-                    default: ToastUtil.showShort(MainActivity.this, todoLists.get(position).getTodo());
-                }
-            }
-        });
     }
 
-    public List<Todo> read() {
-        List<Todo> list = new LinkedList<>();
-        ObjectInputStream objectInputStream = null;
-        try {
-            FileInputStream fileInputStream = this.openFileInput(AddTodoActivity.fileName);
-            objectInputStream = new ObjectInputStream(fileInputStream);
-            Todo todoFromFile = (Todo) objectInputStream.readObject();
-            Log.d(TAG, "read: " + todoFromFile.toString());
-            list.add(todoFromFile);
-            fileInputStream.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (objectInputStream != null) objectInputStream.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+    public void loadDataFromDatabase() {
+        Log.d(TAG, "load();: " + "查询数据库");
+        // TODO: 2019/8/21 从SQLite数据库中查询数据
+        DatabaseHelper databaseHelper = new DatabaseHelper(this, "TODO", null, 1);
+        SQLiteDatabase sqLiteDatabase = databaseHelper.getReadableDatabase();
+        // TODO: 2019/8/21 遍历查询所有todo对象
+        String sql = "select * from todo";
+        Cursor cursor = sqLiteDatabase.rawQuery(sql, null);
+        Todo todo;
+        while (cursor.moveToNext()) {
+            todo = new Todo();
+            todo.setTodo(cursor.getString(cursor.getColumnIndex("title")));
+            todo.setDate(cursor.getString(cursor.getColumnIndex("date")));
+            todo.setTime(cursor.getString(cursor.getColumnIndex("time")));
+            todo.setCode(cursor.getInt(cursor.getColumnIndex("code")));
+            Log.d(TAG, "load(): " + todo.getTodo());
+            todoLists.add(todo);
         }
-        return list;
+        sqLiteDatabase.close();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        todoLists = read();
+        Log.d(TAG, "onStart: ");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        todoLists.clear();
+        loadDataFromDatabase();
+        todoAdapter = new TodoAdapter(this, R.layout.item_todo, todoLists);
+        listView.setAdapter(todoAdapter);
+        Log.d(TAG, "onRestart: " + todoLists.size());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume: ");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause: ");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
 }

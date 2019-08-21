@@ -6,11 +6,14 @@ import android.app.DatePickerDialog;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.ComponentName;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Build;
 import android.os.Environment;
 import android.os.IBinder;
@@ -26,6 +29,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -41,7 +45,6 @@ import butterknife.OnClick;
  *  create by yuen on 2019/8/19
  */
 
-// TODO: 2019/8/19  设计数据表
 
 public class AddTodoActivity extends AppCompatActivity {
 
@@ -63,8 +66,7 @@ public class AddTodoActivity extends AppCompatActivity {
     private AlarmManager alarmManager;
     private AlarmService.AlarmBinder alarmBinder;
 
-
-    public static String fileName = "todos.txt";
+    public static String fileName = "todos";
     private String todo;
     private StringBuffer date = new StringBuffer();
     private int year;
@@ -174,6 +176,7 @@ public class AddTodoActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 ToastUtil.showShort(AddTodoActivity.this, styles[which]);
+                Log.d(TAG, "onClick: " + which);
                 remindType.setText(styles[which]);
                 remindTypeCode = which;
             }
@@ -200,7 +203,7 @@ public class AddTodoActivity extends AppCompatActivity {
         Log.d(TAG, "addTodo: " + timeSeleted[0] + ":" + timeSeleted[1]);
         int hourSeleted = Integer.parseInt(timeSeleted[0]);
         int minuteSelete = Integer.parseInt(timeSeleted[1]);
-        Log.d(TAG, "addTodo: " + yearSeleted + year + " " + monthSeleted + month + " " + dateSeleted + day + " " + hourSeleted + calendar.get(Calendar.HOUR_OF_DAY) + " " + minuteSelete + calendar.get(Calendar.MINUTE));
+        Log.d(TAG, "addTodo: " + yearSeleted + year + " " + monthSeleted + month + " " + daySeleted + day + " " + hourSeleted + calendar.get(Calendar.HOUR_OF_DAY) + " " + minuteSelete + calendar.get(Calendar.MINUTE));
         if (yearSeleted == year && monthSeleted == month && daySeleted == day) {
             if (hourSeleted < calendar.get(Calendar.HOUR_OF_DAY) || (hourSeleted == calendar.get(Calendar.HOUR_OF_DAY) && minuteSelete <= calendar.get(Calendar.MINUTE))) {
                 ToastUtil.showShort(this, "请选择合理时间");
@@ -210,31 +213,27 @@ public class AddTodoActivity extends AppCompatActivity {
         Log.d(TAG, "addTodo: " + yearSeleted + "-" + monthSeleted + "-" + daySeleted + " " + hourSeleted + ":" + minuteSelete);
         ToastUtil.showShort(this, yearSeleted + "-" + monthSeleted + "-" + daySeleted + " " + hourSeleted + ":" + minuteSelete);
 
-        // TODO: 2019/8/20 将数据写入sharedpreference
-        ObjectOutputStream objectOutputStream = null;
-        try {
-            FileOutputStream fileOutputStream = this.openFileOutput(fileName, Context.MODE_APPEND);
-            objectOutputStream = new ObjectOutputStream(fileOutputStream);
-            Todo todo = new Todo(editText.getText().toString(), dateText.getText().toString(), timeText.getText().toString(), remindTypeCode);
-            Log.d(TAG, "addTodo: " + todo.toString());
-            objectOutputStream.writeObject(todo);
-            fileOutputStream.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (objectOutputStream != null) objectOutputStream.close();
-            } catch (IOException e) {
-
-            }
-        }
-        // TODO: 2019/8/20 跳转到mainActivity
+        // TODO: 2019/8/21 将数据写入SQLite
+        SQLiteOpenHelper dbHelper = new DatabaseHelper(this, "TODO", null, 1);
+        SQLiteDatabase sqLiteDatabase = dbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+//        values.put("id", 1); //只有在第一次提交时需要执行
+        values.put("title", editText.getText().toString());
+        values.put("date", dateText.getText().toString());
+        values.put("time", timeText.getText().toString());
+        values.put("code", remindTypeCode);
+        sqLiteDatabase.insert("todo", null, values);
+        Log.d(TAG, "addTodo: " + "写入数据库");
+        sqLiteDatabase.close();
+        // TODO: 2019/8/20 跳转到mainActivity, 理解生命周期的重要性
         Intent intent = new Intent(AddTodoActivity.this, MainActivity.class);
         startActivity(intent);
+//        finish();
+//        super.onDestroy();
     }
 
     public void cancellAdd() {
-        this.finish();
+        finish();
     }
 
     public void setAlarm() {
@@ -258,4 +257,5 @@ public class AddTodoActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
     }
+
 }
