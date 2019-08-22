@@ -1,18 +1,14 @@
 package com.example.yuan.todo;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.ListView;
 
-import java.io.ObjectInputStream;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -103,10 +99,8 @@ public class MainActivity extends AppCompatActivity {
         super.onStop();
     }
 
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
     }
-
 }

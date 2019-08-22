@@ -1,41 +1,23 @@
 package com.example.yuan.todo;
 
-import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.app.PendingIntent;
 import android.app.TimePickerDialog;
-import android.content.ComponentName;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.ServiceConnection;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.os.Build;
-import android.os.Environment;
-import android.os.IBinder;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.util.Calendar;
-import java.util.TimeZone;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -58,15 +40,9 @@ public class AddTodoActivity extends AppCompatActivity {
     TextView timeText;
     @BindView(R.id.remindType)
     TextView remindType;
-    @BindView(R.id.sureAdd)
-    FloatingActionButton floatingActionButton;
 
     private Calendar calendar;
-    private AlarmService alarmService;
-    private AlarmManager alarmManager;
-    private AlarmService.AlarmBinder alarmBinder;
 
-    public static String fileName = "todos";
     private String todo;
     private StringBuffer date = new StringBuffer();
     private int year;
@@ -78,31 +54,17 @@ public class AddTodoActivity extends AppCompatActivity {
     int remindTypeCode = 0; //默认为响铃
     final String[] styles = {"响铃", "振动"};
 
-    @OnClick({R.id.date, R.id.time, R.id.remindType, R.id.addTodo, R.id.cancel, R.id.sureAdd, R.id.cancellAdd})
+    @OnClick({R.id.date, R.id.time, R.id.remindType, R.id.sureAdd, R.id.cancellAdd})
     public void onclick(View view) {
 
         switch (view.getId()) {
             case R.id.date: showDatePickDlg(); break;
             case R.id.time: showTimePickDlg(); break;
             case R.id.remindType: showChoise(); break;
-            case R.id.addTodo: setAlarm(); break;
-            case R.id.cancel: cancelAlarm(); break;
             case R.id.sureAdd: addTodo(); break;
             case R.id.cancellAdd: cancellAdd(); break;
         }
     }
-
-    private ServiceConnection serviceConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            alarmBinder = (AlarmService.AlarmBinder) service;
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -175,7 +137,6 @@ public class AddTodoActivity extends AppCompatActivity {
         builder.setItems(styles, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                ToastUtil.showShort(AddTodoActivity.this, styles[which]);
                 Log.d(TAG, "onClick: " + which);
                 remindType.setText(styles[which]);
                 remindTypeCode = which;
@@ -211,13 +172,12 @@ public class AddTodoActivity extends AppCompatActivity {
             }
         }
         Log.d(TAG, "addTodo: " + yearSeleted + "-" + monthSeleted + "-" + daySeleted + " " + hourSeleted + ":" + minuteSelete);
-        ToastUtil.showShort(this, yearSeleted + "-" + monthSeleted + "-" + daySeleted + " " + hourSeleted + ":" + minuteSelete);
 
         // TODO: 2019/8/21 将数据写入SQLite
         SQLiteOpenHelper dbHelper = new DatabaseHelper(this, "TODO", null, 1);
         SQLiteDatabase sqLiteDatabase = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
-//        values.put("id", 1); //只有在第一次提交时需要执行
+//        values.put("id", 1); //只有在第一次提交时需要执行或者用一个布尔变量判断是否是第一次上传数据
         values.put("title", editText.getText().toString());
         values.put("date", dateText.getText().toString());
         values.put("time", timeText.getText().toString());
@@ -225,37 +185,26 @@ public class AddTodoActivity extends AppCompatActivity {
         sqLiteDatabase.insert("todo", null, values);
         Log.d(TAG, "addTodo: " + "写入数据库");
         sqLiteDatabase.close();
-        // TODO: 2019/8/20 跳转到mainActivity, 理解生命周期的重要性
-        Intent intent = new Intent(AddTodoActivity.this, MainActivity.class);
-        startActivity(intent);
-//        finish();
-//        super.onDestroy();
+
+        Intent intentToService = new Intent(AddTodoActivity.this, AlarmService.class);
+        intentToService.putExtra("todo", editText.getText().toString());
+        intentToService.putExtra("date", dateText.getText().toString());
+        intentToService.putExtra("time", timeText.getText().toString());
+        intentToService.putExtra("remindTypeCode", remindTypeCode);
+        intentToService.putExtra("isSetAlarm", true);
+        Log.d(TAG, "addTodo: " + editText.getText().toString() + remindTypeCode);
+        startService(intentToService);
+
+        Intent intentToMainAct = new Intent(AddTodoActivity.this, MainActivity.class);
+        startActivity(intentToMainAct);
     }
 
     public void cancellAdd() {
         finish();
     }
 
-    public void setAlarm() {
-        todo = editText.getText().toString();
-        Intent intent = new Intent(this, AlarmService.class);
-        intent.putExtra("date", dateText.getText().toString());
-        intent.putExtra("time", timeText.getText().toString());
-        intent.putExtra("remindTpye", remindTypeCode);  //service还没处理remindType
-        intent.putExtra("todo", todo);
-        startService(intent);
-    }
-
-    public void cancelAlarm() {
-        Intent intent = new Intent(this, AlarmReceiver.class);
-        todo = editText.getText().toString();
-        intent.putExtra("todo", todo);
-        sendBroadcast(intent);
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
     }
-
 }
