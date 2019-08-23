@@ -3,6 +3,7 @@ package com.example.yuan.todo;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.example.yuan.todo.util.ToastUtil;
 
 import java.util.List;
 
@@ -44,7 +47,7 @@ public class TodoAdapter extends ArrayAdapter<Todo> {
             viewHolder = new ViewHolder(view);
             view.setTag(viewHolder);
         }
-        char[] todoTitle = todo.getTodo().toCharArray();
+        final char[] todoTitle = todo.getTodo().toCharArray();
         Log.d(TAG, "getView: " + todoTitle[0]);
         viewHolder.todo.setText(String.valueOf(todoTitle[0]));
         viewHolder.date.setText(todo.getDate());
@@ -61,9 +64,8 @@ public class TodoAdapter extends ArrayAdapter<Todo> {
         viewHolder.deleteItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "onClick: " + "删除开始");
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setTitle("是否删除该待办时间");
+                builder.setTitle("是否删除该待办事项");
                 builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -75,6 +77,13 @@ public class TodoAdapter extends ArrayAdapter<Todo> {
                         String sql = "delete from todo where title = '" + todo.getTodo() +"' and date = '" + todo.getDate() + "' and time = '" + todo.getTime() + "' and code = '" + todo.getCode() + "'";
                         sqLiteDatabase.execSQL(sql);
                         sqLiteDatabase.close();
+                        Intent intentToAlarmService = new Intent(getContext(), AlarmService.class);
+                        intentToAlarmService.putExtra("todo", todo.getTodo());
+                        intentToAlarmService.putExtra("date", todo.getDate());
+                        intentToAlarmService.putExtra("time", todo.getTime());
+                        intentToAlarmService.putExtra("remindTypeCode", todo.getCode());
+                        intentToAlarmService.putExtra("isSetAlarm", false);
+                        getContext().startService(intentToAlarmService);
                         Log.d(TAG, "onClick: " + "删除成功");
                     }
                 });
@@ -85,6 +94,7 @@ public class TodoAdapter extends ArrayAdapter<Todo> {
                     }
                 });
                 builder.show();
+
             }
         });
 

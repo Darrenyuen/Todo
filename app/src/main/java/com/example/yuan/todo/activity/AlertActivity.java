@@ -1,4 +1,4 @@
-package com.example.yuan.todo;
+package com.example.yuan.todo.activity;
 
 import android.app.Service;
 import android.content.DialogInterface;
@@ -9,6 +9,8 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+
+import com.example.yuan.todo.R;
 
 public class AlertActivity extends AppCompatActivity {
 
@@ -45,7 +47,8 @@ public class AlertActivity extends AppCompatActivity {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     vibrator.cancel();
-                    AlertActivity.this.finish();
+//                    AlertActivity.this.finish();
+                    onDestroy();
                 }
             });
             builder.show();

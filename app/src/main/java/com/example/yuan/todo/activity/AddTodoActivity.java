@@ -1,4 +1,4 @@
-package com.example.yuan.todo;
+package com.example.yuan.todo.activity;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -17,16 +17,16 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.example.yuan.todo.AlarmService;
+import com.example.yuan.todo.DatabaseHelper;
+import com.example.yuan.todo.R;
+import com.example.yuan.todo.util.ToastUtil;
+
 import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
-/**
- *  create by yuen on 2019/8/19
- */
-
 
 public class AddTodoActivity extends AppCompatActivity {
 

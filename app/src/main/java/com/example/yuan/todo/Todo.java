@@ -1,10 +1,6 @@
 package com.example.yuan.todo;
 
-import java.io.Serializable;
-
-public class Todo implements Serializable {
-
-    private static final long serivalVersionUID = 1234567890L;
+public class Todo {
 
     String todo;
     String date;
@@ -23,16 +19,32 @@ public class Todo implements Serializable {
         this.code = code;
     }
 
+    public void setTodo(String todo) {
+        this.todo = todo;
+    }
+
     public String getTodo() {
         return todo;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public String getDate() {
         return date;
     }
 
+    public void setTime(String time) {
+        this.time = time;
+    }
+
     public String getTime() {
         return time;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
     }
 
     public int getCode() {
