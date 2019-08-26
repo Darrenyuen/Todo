@@ -7,6 +7,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ListView;
 
 import com.example.yuan.todo.DatabaseHelper;
@@ -33,10 +34,18 @@ public class MainActivity extends AppCompatActivity {
     private List<Todo> todoLists;
     private TodoAdapter todoAdapter;
 
-    @OnClick(R.id.toAddTodoActivity)
-    void toAddTodoActivity() {
-        Intent intent = new Intent(MainActivity.this, AddTodoActivity.class);
-        startActivity(intent);
+    @OnClick({R.id.toAddTodoActivity, R.id.toTodayInHistory})
+    void toOtherActivity(View view) {
+        switch (view.getId()) {
+            case R.id.toAddTodoActivity:
+                Intent intentToAddAct = new Intent(MainActivity.this, AddTodoActivity.class);
+                startActivity(intentToAddAct);
+                break;
+            case R.id.toTodayInHistory:
+                Intent intentToTodayAct = new Intent(MainActivity.this, TodayInHistoryActivity.class);
+                startActivity(intentToTodayAct);
+                break;
+        }
     }
 
     @Override

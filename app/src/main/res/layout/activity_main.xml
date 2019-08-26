@@ -30,13 +30,27 @@
             android:layout_height="match_parent"/>
     </LinearLayout>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/toAddTodoActivity"
-        android:src="@drawable/add"
-        android:background="@color/colorPrimary"
+    <LinearLayout
         android:layout_gravity="bottom|right"
-        android:layout_margin="15dp"
+        android:orientation="vertical"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content">
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/toTodayInHistory"
+            android:src="@drawable/ic_to_todayinhistory"
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/toAddTodoActivity"
+            android:src="@drawable/add"
+            android:background="@color/colorPrimary"
+            android:layout_gravity="bottom|right"
+            android:layout_margin="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>
