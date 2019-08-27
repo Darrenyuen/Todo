@@ -18,6 +18,6 @@ public interface DataAPI {
      *  month
      *  day
      */
-    @GET("key=8d0bc89de1ea3be90e78aa9f1d79a12&v=1.0")
+    @GET("toh?key=48d0bc89de1ea3be90e78aa9f1d79a12&v=1.0")
     Observable<Bean> getData(@Query("month") int month, @Query("day") int day);
 }

@@ -7,15 +7,17 @@ package com.example.yuan.todo.bean;
 public class TodayInHistory {
     String title;
     String date;
+    String url;
+    String luar;
+    String des;
 
-    public TodayInHistory() {
-        super();
-    }
-
-    public TodayInHistory(String title, String date) {
+    public TodayInHistory(String title, String date, String luar, String url, String des) {
         super();
         this.title = title;
         this.date = date;
+        this.luar = luar;
+        this.url = url;
+        this.des = des;
     }
 
     public String getTitle() {
@@ -24,5 +26,17 @@ public class TodayInHistory {
 
     public String getDate() {
         return date;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public String getLuar() {
+        return luar;
+    }
+
+    public String getDes() {
+        return des;
     }
 }

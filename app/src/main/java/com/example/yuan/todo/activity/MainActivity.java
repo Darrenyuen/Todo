@@ -12,8 +12,8 @@ import android.widget.ListView;
 
 import com.example.yuan.todo.DatabaseHelper;
 import com.example.yuan.todo.R;
-import com.example.yuan.todo.Todo;
-import com.example.yuan.todo.TodoAdapter;
+import com.example.yuan.todo.bean.Todo;
+import com.example.yuan.todo.adapter.TodoAdapter;
 
 import java.util.LinkedList;
 import java.util.List;

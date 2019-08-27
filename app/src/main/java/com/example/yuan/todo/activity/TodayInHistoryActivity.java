@@ -89,8 +89,11 @@ public class TodayInHistoryActivity extends AppCompatActivity {
                         int year = resultList.get(i).getYear();
                         int month = resultList.get(i).getMonth();
                         int day = resultList.get(i).getDay();
+                        String url = resultList.get(i).getPic();
+                        String luar = resultList.get(i).getLunar();
+                        String des = resultList.get(i).getDes();
                         String date = String.valueOf(year + "-" + month + "-" + day);
-                        TodayInHistory todayInHistory = new TodayInHistory(title, date);
+                        TodayInHistory todayInHistory = new TodayInHistory(title, date, luar, url, des);
                         todayInHistoryList.add(todayInHistory);
                     }
                 }

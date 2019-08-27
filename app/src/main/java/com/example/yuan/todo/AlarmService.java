@@ -97,8 +97,6 @@ public class AlarmService extends Service {
             calendar.set(year, (month-1), day, hour, minute, 0);
             pendingIntent = PendingIntent.getBroadcast(context, alarmCount++, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-            intent = null;
-            pendingIntent = null;
         }
 
         public void cancelAlarm(String todo, String date, String time, int code) {

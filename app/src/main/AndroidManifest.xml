@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.yuan.todo">
 
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -12,7 +13,9 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.MainActivity" android:launchMode="singleTask">
+        <activity
+            android:name=".activity.MainActivity"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -24,7 +27,7 @@
         <service
             android:name=".AlarmService"
             android:enabled="true"
-            android:exported="true"/>
+            android:exported="true" />
 
         <receiver
             android:name=".AlarmReceiver"
@@ -35,7 +38,8 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".activity.AlertActivity"></activity>
+        <activity android:name=".activity.AlertActivity" />
+        <activity android:name=".activity.TodayInHistoryActivity"></activity>
     </application>
 
 </manifest>

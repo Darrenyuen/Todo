@@ -1,4 +1,4 @@
-package com.example.yuan.todo;
+package com.example.yuan.todo.adapter;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -13,6 +13,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.yuan.todo.AlarmService;
+import com.example.yuan.todo.DatabaseHelper;
+import com.example.yuan.todo.R;
+import com.example.yuan.todo.bean.Todo;
 import com.example.yuan.todo.util.ToastUtil;
 
 import java.util.List;

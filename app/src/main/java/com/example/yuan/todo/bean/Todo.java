@@ -1,4 +1,4 @@
-package com.example.yuan.todo;
+package com.example.yuan.todo.bean;
 
 public class Todo {
 

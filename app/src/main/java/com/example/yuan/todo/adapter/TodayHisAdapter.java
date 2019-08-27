@@ -6,8 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.yuan.todo.R;
 import com.example.yuan.todo.bean.TodayInHistory;
 
@@ -45,17 +47,26 @@ public class TodayHisAdapter extends ArrayAdapter<TodayInHistory> {
             viewHolder = (ViewHolder) view.getTag();
         }
         Log.d(TAG, "getView: " + todayInHistory.getTitle());
+        Glide.with(getContext()).load(todayInHistory.getUrl()).into(viewHolder.imageView);
         viewHolder.title.setText(todayInHistory.getTitle());
         viewHolder.date.setText(todayInHistory.getDate());
+        viewHolder.luar.setText(todayInHistory.getLuar());
+        viewHolder.des.setText(todayInHistory.getDes());
         return view;
     }
 
     class ViewHolder {
 
+        @BindView(R.id.pic)
+        ImageView imageView;
         @BindView(R.id.title)
         TextView title;
         @BindView(R.id.date)
         TextView date;
+        @BindView(R.id.luar)
+        TextView luar;
+        @BindView(R.id.des)
+        TextView des;
 
         public ViewHolder(View view) {
             super();

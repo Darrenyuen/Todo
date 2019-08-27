@@ -25,19 +25,17 @@ public class HttpMethods {
 
     private String TAG = this.getClass().getSimpleName();
 
-    private final String BASE_URL = "http://api.juheapi.com/japi/toh";
-    private final int DEFAULT_TIMEOUT = 5;
+    private static final String BASE_URL = "http://api.juheapi.com/japi/";
+    private static final int DEFAULT_TIMEOUT = 5;
 
-    private HttpMethods httpMethods;
-    private Retrofit retrofit;
     private DataAPI dataAPI;
 
-    public HttpMethods() {
+    private HttpMethods() {
         //手动创建一个OkHttpClient并设置超时时间
         OkHttpClient.Builder httpClientBuilder = new OkHttpClient.Builder();
         httpClientBuilder.connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
 
-        retrofit = new Retrofit.Builder()
+        Retrofit retrofit = new Retrofit.Builder()
                 .client(httpClientBuilder.build())
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
