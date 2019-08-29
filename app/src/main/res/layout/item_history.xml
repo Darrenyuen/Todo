@@ -10,7 +10,6 @@
 
         <ImageView
             android:id="@+id/pic"
-            android:src="@drawable/test"
             android:layout_width="65dp"
             android:layout_height="81dp" />
 
