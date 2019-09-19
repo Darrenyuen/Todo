@@ -39,7 +39,7 @@ public class AlertActivity extends AppCompatActivity {
                     AlertActivity.this.finish();
                 }
             }).show();
-        } else {
+        } else if (code == 1){
             vibrator = (Vibrator) getSystemService(Service.VIBRATOR_SERVICE);
             vibrator.vibrate(30000);
             AlertDialog.Builder builder = new AlertDialog.Builder(this);

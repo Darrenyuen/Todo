@@ -52,7 +52,7 @@ public class AddTodoActivity extends AppCompatActivity {
     private int hour;
     private int minute;
     int remindTypeCode = 0; //默认为响铃
-    final String[] styles = {"响铃", "振动"};
+    final String[] styles = {"响铃", "振动", "不提醒"};
 
     @OnClick({R.id.date, R.id.time, R.id.remindType, R.id.sureAdd, R.id.cancellAdd})
     public void onclick(View view) {
