@@ -19,6 +19,7 @@ import com.example.yuan.todo.R;
 import com.example.yuan.todo.bean.Todo;
 import com.example.yuan.todo.util.ToastUtil;
 
+import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
@@ -56,6 +57,16 @@ public class TodoAdapter extends ArrayAdapter<Todo> {
         viewHolder.todo.setText(String.valueOf(todoTitle[0]));
         viewHolder.date.setText(todo.getDate());
         viewHolder.time.setText(todo.getTime());
+        //判断是否过期
+        Calendar calendar = Calendar.getInstance();
+        String[] date = todo.getDate().split("-");
+        int setYear = Integer.parseInt(date[0]);
+        int setMonth = Integer.parseInt(date[1]);
+        int setDay = Integer.parseInt(date[2]);
+        String[] time = todo.getTime().split(":");
+        int setHour = Integer.parseInt(time[0]);
+        int setMin = Integer.parseInt(time[1]);
+        Log.d(TAG, "getView: " + setYear + setMonth + setDay + setHour + setMin);
 
         viewHolder.todo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,6 +126,8 @@ public class TodoAdapter extends ArrayAdapter<Todo> {
         TextView time;
         @BindView(R.id.deleteItem)
         ImageView deleteItem;
+        @BindView(R.id.isOut)
+        TextView outText;
 
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);

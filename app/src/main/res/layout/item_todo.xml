@@ -49,15 +49,27 @@
 
     <LinearLayout
         android:layout_alignParentRight="true"
-        android:layout_width="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginRight="10dp"
+        android:orientation="vertical"
+        android:layout_width="50dp"
         android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/isOut"
+            android:text="已过期"
+            android:layout_gravity="center"
+            android:textSize="14sp"
+            android:textColor="#c90e2d"
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
         <ImageView
             android:id="@+id/deleteItem"
+            android:layout_gravity="center"
+            android:layout_marginTop="15dp"
             android:src="@drawable/ic_delete"
-            android:layout_gravity="bottom"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 

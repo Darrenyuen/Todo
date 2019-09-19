@@ -1,6 +1,7 @@
 package com.example.yuan.todo.util;
 
 import com.example.yuan.todo.bean.Bean;
+import com.example.yuan.todo.bean.TodayInHistory;
 
 import java.util.concurrent.TimeUnit;
 
@@ -10,6 +11,7 @@ import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
 import rx.observers.Subscribers;
 import rx.schedulers.Schedulers;
 
