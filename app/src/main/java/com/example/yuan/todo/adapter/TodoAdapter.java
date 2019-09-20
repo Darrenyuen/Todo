@@ -40,7 +40,6 @@ public class TodoAdapter extends ArrayAdapter<Todo> {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        Log.d(TAG, "getView: " + position);
         final Todo todo = getItem(position);
         View view;
         final ViewHolder viewHolder;
@@ -67,7 +66,12 @@ public class TodoAdapter extends ArrayAdapter<Todo> {
         int setHour = Integer.parseInt(time[0]);
         int setMin = Integer.parseInt(time[1]);
         Log.d(TAG, "getView: " + setYear + setMonth + setDay + setHour + setMin);
-
+        if (setYear < calendar.get(Calendar.YEAR) || (setYear == calendar.get(Calendar.YEAR) && setMonth < calendar.get(Calendar.MONTH)+1) || (setYear == calendar.get(Calendar.YEAR) && setMonth == calendar.get(Calendar.MONTH)+1 && setDay < calendar.get(Calendar.DAY_OF_MONTH))
+                || setYear == calendar.get(Calendar.YEAR) && setMonth == calendar.get(Calendar.MONTH)+1 && setDay == calendar.get(Calendar.DAY_OF_MONTH) && setHour < calendar.get(Calendar.HOUR_OF_DAY)
+                || setYear == calendar.get(Calendar.YEAR) && setMonth == calendar.get(Calendar.MONTH)+1 && setDay == calendar.get(Calendar.DAY_OF_MONTH) && setHour == calendar.get(Calendar.HOUR_OF_DAY) && setMin <= calendar.get(Calendar.MINUTE)) {
+            viewHolder.outText.setText("已过期");
+            Log.d(TAG, "getView: " + "已过期");
+        }
         viewHolder.todo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -42,16 +42,13 @@ public class AlertActivity extends AppCompatActivity {
         } else if (code == 1){
             vibrator = (Vibrator) getSystemService(Service.VIBRATOR_SERVICE);
             vibrator.vibrate(30000);
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setIcon(R.drawable.ic_remind).setTitle("待办事项").setMessage(todo).setPositiveButton("收到", new DialogInterface.OnClickListener() {
+            new AlertDialog.Builder(this).setIcon(R.drawable.ic_remind).setTitle("待办事项").setMessage(todo).setPositiveButton("收到", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     vibrator.cancel();
-//                    AlertActivity.this.finish();
-                    onDestroy();
+                    AlertActivity.this.finish();
                 }
-            });
-            builder.show();
+            }).show();
         }
     }
 
